@@ -68,7 +68,7 @@ def main():
 
     selected_months = st.multiselect("Select Months", options=["All"] + months, default="All")
     selected_years = st.multiselect("Select Years", options=["All"] + years, default="All")
-    crop_input = st.text_input("Enter Crop Names (separated by comma)", "GROUNDNUT, BENGALGRAM")
+    crop_input = st.text_input("Enter Crop Names (separated by comma)")
 
     if "All" in selected_months:
         selected_months = months
