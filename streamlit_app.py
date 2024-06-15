@@ -1,18 +1,24 @@
 import streamlit as st
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 import pandas as pd
 from io import StringIO
 import time
+from webdriver_manager.chrome import ChromeDriverManager
 
 def fetch_data(selected_months, selected_years, crops):
     chrome_options = Options()
     chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--window-size=1920x1080")
     chrome_options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
 
-    driver = webdriver.Chrome(options=chrome_options)
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
     driver.get("https://krama.karnataka.gov.in/reports/DateWiseReport.aspx")
 
     markets = ["AllMarkets"]
@@ -62,7 +68,7 @@ def main():
 
     selected_months = st.multiselect("Select Months", options=["All"] + months, default="All")
     selected_years = st.multiselect("Select Years", options=["All"] + years, default="All")
-    crop_input = st.text_input("Enter Crop Names (separated by comma)")
+    crop_input = st.text_input("Enter Crop Names (separated by comma)", "GROUNDNUT, BENGALGRAM")
 
     if "All" in selected_months:
         selected_months = months
